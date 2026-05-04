@@ -170,7 +170,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyozPSkEZgj1jtVoyRH-2XM0n3lFGixT9XjIna0sWVUPl1QGd04ulRR5c_UOf-CI8fV/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylruqPvqe6ZhX6JX_OB1r8kLvrmYIpwiK6C0AT9wtzCVGLBFJMZAs4x0fnNqOwi2pB/exec';
 
   const MONTHS       = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -191,11 +191,10 @@
   }
 
   async function api(payload) {
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-    return res.json();
+    const params = new URLSearchParams(payload);
+    const res = await fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET' });
+    const text = await res.text();
+    try { return JSON.parse(text); } catch(e) { throw new Error('Bad response: ' + text.slice(0,100)); }
   }
 
   async function loadData(showSpin = false) {
