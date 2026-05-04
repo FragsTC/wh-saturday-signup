@@ -29,7 +29,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); min-height: 100vh; }
 
-  /* Header */
   .header { background: var(--navy); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .header-left { display: flex; align-items: center; gap: 16px; }
   .logo-mark { width: 44px; height: 44px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: var(--navy); flex-shrink: 0; }
@@ -41,25 +40,16 @@
   .year-btn { background: none; border: none; cursor: pointer; color: var(--gold-light); font-size: 16px; padding: 8px 14px; transition: background 0.15s; }
   .year-btn:hover { background: var(--navy-light); }
   .year-display { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--white); padding: 8px 16px; border-left: 1px solid var(--navy-light); border-right: 1px solid var(--navy-light); min-width: 68px; text-align: center; }
-  .export-btn { background: transparent; border: 1px solid var(--navy-light); cursor: pointer; color: #a0b4cc; font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
-  .export-btn:hover { background: var(--navy-mid); color: var(--white); }
-  .refresh-btn { background: transparent; border: 1px solid var(--navy-light); cursor: pointer; color: #a0b4cc; font-size: 13px; padding: 9px 14px; border-radius: 8px; transition: background 0.15s, color 0.15s; display: flex; align-items: center; gap: 6px; }
-  .refresh-btn:hover { background: var(--navy-mid); color: var(--white); }
-  .refresh-btn svg { transition: transform 0.4s; }
-  .refresh-btn.spinning svg { transform: rotate(360deg); }
+  .icon-btn { background: transparent; border: 1px solid var(--navy-light); cursor: pointer; color: #a0b4cc; font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; display: flex; align-items: center; gap: 6px; }
+  .icon-btn:hover { background: var(--navy-mid); color: var(--white); }
+  .icon-btn svg { transition: transform 0.5s; }
+  .icon-btn.spinning svg { transform: rotate(360deg); }
 
-  /* Status bar */
   .status-bar { background: var(--navy-mid); padding: 8px 40px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #7a93b0; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #7a93b0; flex-shrink: 0; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #7a93b0; flex-shrink: 0; transition: background 0.3s; }
   .status-dot.live { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
   .status-dot.error { background: #f87171; }
 
-  /* Setup banner */
-  .setup-banner { background: #fff8e1; border-bottom: 2px solid var(--gold); padding: 12px 40px; font-size: 13px; color: #7a4f00; display: flex; align-items: flex-start; gap: 10px; }
-  .setup-banner strong { font-weight: 600; }
-  .setup-banner a { color: var(--navy); font-weight: 600; text-decoration: underline; cursor: pointer; }
-
-  /* Summary bar */
   .summary-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 40px; display: flex; gap: 32px; flex-wrap: wrap; align-items: center; }
   .summary-stat { display: flex; align-items: center; gap: 8px; }
   .stat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
@@ -68,7 +58,6 @@
   .stat-label { font-size: 13px; color: var(--text-mid); }
   .stat-count { font-size: 13px; font-weight: 600; color: var(--text-dark); }
 
-  /* Calendar */
   .calendar-wrap { padding: 32px 40px; }
   .months-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
   .month-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
@@ -86,11 +75,6 @@
   .sat-names { font-size: 11px; color: var(--success-text); line-height: 1.5; }
   .sat-empty { font-size: 11px; color: var(--text-light); }
 
-  /* Skeleton loader */
-  .skeleton { background: linear-gradient(90deg, #e8edf5 25%, #f0f4fa 50%, #e8edf5 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 5px; height: 13px; margin-bottom: 8px; }
-  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-  /* Modals */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,20,70,0.55); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--white); border-radius: 14px; box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; overflow: hidden; animation: modal-in 0.18s ease; }
@@ -100,11 +84,13 @@
   .modal-date-title { font-size: 20px; font-weight: 600; color: var(--white); }
   .modal-body { padding: 20px 22px; }
   .modal-section-label { font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
-  .names-list { margin-bottom: 16px; }
+  .names-list { margin-bottom: 12px; }
   .name-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--success-bg); border: 1px solid var(--success-border); border-radius: 7px; margin-bottom: 6px; font-size: 13px; color: var(--success-text); font-weight: 500; }
   .remove-btn { background: none; border: none; cursor: pointer; color: #a0aec0; font-size: 16px; line-height: 1; padding: 0 2px; transition: color 0.15s; }
   .remove-btn:hover { color: #e53e3e; }
-  .empty-state { font-size: 13px; color: var(--text-light); padding: 6px 0 14px; font-style: italic; }
+  .remove-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .empty-state { font-size: 13px; color: var(--text-light); padding: 6px 0 12px; font-style: italic; }
+  .saving-indicator { font-size: 12px; color: var(--text-light); font-style: italic; min-height: 18px; margin-bottom: 10px; }
   .input-row { display: flex; gap: 8px; margin-top: 4px; }
   .name-input { flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text-dark); outline: none; transition: border-color 0.15s; }
   .name-input:focus { border-color: var(--navy); }
@@ -114,36 +100,16 @@
   .add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .modal-footer { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
   .close-btn { background: none; border: 1px solid var(--border); cursor: pointer; color: var(--text-mid); font-size: 13px; font-weight: 500; padding: 8px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
-  .close-btn:hover { background: var(--cream); border-color: #94a3b8; }
-  .saving-indicator { font-size: 12px; color: var(--text-light); font-style: italic; margin-bottom: 10px; min-height: 18px; }
-
-  /* Setup instructions */
-  .setup-section { background: #f0f4ff; border-top: 1px solid #c0ccee; padding: 32px 40px; display: none; }
-  .setup-section h2 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
-  .setup-section .setup-sub { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
-  .steps { display: flex; flex-direction: column; gap: 16px; }
-  .step { display: flex; gap: 14px; align-items: flex-start; }
-  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: var(--gold-light); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-  .step-body { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
-  .step-body strong { color: var(--text-dark); font-weight: 600; }
-  .step-body code { background: #e2e8f8; padding: 2px 7px; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--navy); }
-  .step-body a { color: var(--navy); font-weight: 600; }
-  .setup-close { margin-top: 20px; background: none; border: 1px solid #c0ccee; padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 13px; color: var(--text-mid); font-family: 'DM Sans', sans-serif; }
+  .close-btn:hover { background: var(--cream); }
 
   @media (max-width: 600px) {
-    .header, .summary-bar, .calendar-wrap, .setup-banner, .setup-section, .status-bar { padding-left: 20px; padding-right: 20px; }
+    .header, .summary-bar, .calendar-wrap, .status-bar { padding-left: 20px; padding-right: 20px; }
     .months-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- Setup banner -->
-<div class="setup-banner" id="setup-banner">
-  ⚙️ <span><strong>Setup needed before sharing:</strong> You need a free JSONBin API key and bin ID. <a onclick="toggleSetup()">See the 4-step instructions below</a> — takes about 5 minutes.</span>
-</div>
-
-<!-- Header -->
 <header class="header">
   <div class="header-left">
     <div class="logo-mark">WH</div>
@@ -158,58 +124,29 @@
       <span class="year-display" id="year-display">2026</span>
       <button class="year-btn" onclick="changeYear(1)">&#8594;</button>
     </div>
-    <button class="refresh-btn" id="refresh-btn" onclick="loadFromBin(true)" title="Refresh sign-ups">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    <button class="icon-btn" id="refresh-btn" onclick="loadData(true)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       Refresh
     </button>
-    <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+    <button class="icon-btn" onclick="exportCSV()">Export CSV</button>
   </div>
 </header>
 
-<!-- Status bar -->
 <div class="status-bar">
   <div class="status-dot" id="status-dot"></div>
   <span id="status-text">Connecting…</span>
 </div>
 
-<!-- Summary bar -->
 <div class="summary-bar">
   <div class="summary-stat"><div class="stat-dot empty"></div><span class="stat-label">Open Saturdays</span><span class="stat-count" id="count-open">—</span></div>
   <div class="summary-stat"><div class="stat-dot partial"></div><span class="stat-label">Saturdays signed up</span><span class="stat-count" id="count-signed">—</span></div>
   <div class="summary-stat"><div class="stat-dot" style="background:var(--navy)"></div><span class="stat-label">Total sign-ups</span><span class="stat-count" id="count-total">—</span></div>
 </div>
 
-<!-- Calendar -->
 <div class="calendar-wrap">
   <div class="months-grid" id="months-grid"></div>
 </div>
 
-<!-- Setup instructions -->
-<div class="setup-section" id="setup-section">
-  <h2>⚙️ One-Time Setup — 4 Steps</h2>
-  <p class="setup-sub">Do this once, then share the file with your team. Takes about 5 minutes.</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-body">Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and create a free account.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-body">After logging in, click <strong>API Keys</strong> in the top menu → <strong>Create Access Key</strong>. Copy the key — this is your <strong>API Key</strong>.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-body">Click <strong>Bins</strong> → <strong>Create a Bin</strong>. Paste in <code>{}</code> as the content and save. Copy the <strong>Bin ID</strong> from the URL or the bin detail page.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-body">Open this <code>.html</code> file in any text editor (Notepad, TextEdit, VS Code). Find the <strong>JSONBIN CONFIG</strong> section near the bottom of the file and paste in your <strong>API Key</strong> and <strong>Bin ID</strong>. Save the file — the yellow banner disappears and it's live.<br><br>Then host it on GitHub Pages and share the URL with your team (see the GitHub Pages instructions in the README if needed).</div>
-    </div>
-  </div>
-  <button class="setup-close" onclick="toggleSetup()">Close</button>
-</div>
-
-<!-- Sign-up modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
   <div class="modal">
     <div class="modal-header">
@@ -233,94 +170,63 @@
 </div>
 
 <script>
-  // ════════════════════════════════════════════
-  //  JSONBIN CONFIG — paste your values here
-  // ════════════════════════════════════════════
-  const JSONBIN_API_KEY = '$2a$10$3YUgzpsEqvN1QG0eRuBv6eT6MVkC4luaqDGeg3Pv3iArtVnlbTekK';
-  const JSONBIN_BIN_ID  = '69f8cad9856a682189a61fc8';
-  // ════════════════════════════════════════════
-
-  const BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
-  const HEADERS  = { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Access-Key': JSONBIN_API_KEY };
-
-  const configured = JSONBIN_API_KEY !== 'YOUR_API_KEY' && JSONBIN_BIN_ID !== 'YOUR_BIN_ID';
-  if (configured) document.getElementById('setup-banner').style.display = 'none';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbws4SCpYAQEV0gzcBfuVQNQn8N0BpI-timdr-S0hqslcqShtqfiglOMhLL55xGfqXUwYA/exec';
 
   const MONTHS       = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   let year      = new Date().getFullYear();
-  let signups   = {};   // { 'YYYY-MM-DD': ['Name1', 'Name2'] }
+  let signups   = {};
   let activeKey = null;
-  let saving    = false;
-  let lastLoaded = null;
+  let busy      = false;
 
-  // ── Status helpers ──
   function setStatus(state, text) {
-    const dot  = document.getElementById('status-dot');
-    const span = document.getElementById('status-text');
-    dot.className  = 'status-dot' + (state === 'live' ? ' live' : state === 'error' ? ' error' : '');
-    span.textContent = text;
+    document.getElementById('status-dot').className = 'status-dot' + (state === 'live' ? ' live' : state === 'error' ? ' error' : '');
+    document.getElementById('status-text').textContent = text;
   }
 
-  // ── JSONBin: load ──
-  async function loadFromBin(showRefresh = false) {
-    if (!configured) { setStatus('error', 'Not configured — see setup instructions below'); renderCalendar(); return; }
-    if (showRefresh) {
+  function setSaving(text) {
+    const el = document.getElementById('saving-indicator');
+    if (el) el.textContent = text;
+  }
+
+  async function api(payload) {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+
+  async function loadData(showSpin = false) {
+    if (showSpin) {
       const btn = document.getElementById('refresh-btn');
       btn.classList.add('spinning');
-      setTimeout(() => btn.classList.remove('spinning'), 400);
+      setTimeout(() => btn.classList.remove('spinning'), 500);
     }
     setStatus('', 'Loading…');
     try {
-      const res  = await fetch(BASE_URL + '/latest', { headers: HEADERS });
-      if (!res.ok) throw new Error(res.status);
-      const json = await res.json();
-      signups    = json.record || {};
-      lastLoaded = new Date();
-      setStatus('live', 'Live — last updated ' + lastLoaded.toLocaleTimeString());
-      renderCalendar();
+      const res = await api({ action: 'load' });
+      if (res.success) {
+        signups = res.data || {};
+        setStatus('live', 'Live — last updated ' + new Date().toLocaleTimeString());
+        renderCalendar();
+      } else {
+        throw new Error(res.error);
+      }
     } catch(e) {
-      setStatus('error', 'Could not connect — showing cached data');
+      setStatus('error', 'Could not connect — check your connection and refresh');
       renderCalendar();
     }
   }
 
-  // ── JSONBin: save ──
-  async function saveToBin() {
-    if (!configured) return;
-    saving = true;
-    setSavingText('Saving…');
-    try {
-      const res = await fetch(BASE_URL, {
-        method: 'PUT',
-        headers: HEADERS,
-        body: JSON.stringify(signups)
-      });
-      if (!res.ok) throw new Error(res.status);
-      saving = false;
-      setSavingText('Saved ✓');
-      setTimeout(() => setSavingText(''), 2000);
-      setStatus('live', 'Live — last updated ' + new Date().toLocaleTimeString());
-      renderCalendar();
-    } catch(e) {
-      saving = false;
-      setSavingText('Save failed — try again');
-    }
-  }
-
-  function setSavingText(t) {
-    const el = document.getElementById('saving-indicator');
-    if (el) el.textContent = t;
-  }
-
-  // ── Calendar helpers ──
   function getSaturdays(y) {
     const out = [], d = new Date(y, 0, 1);
     while (d.getDay() !== 6) d.setDate(d.getDate() + 1);
     while (d.getFullYear() === y) { out.push(new Date(d)); d.setDate(d.getDate() + 7); }
     return out;
   }
+
   function fmtKey(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function fmtDisplay(d) { return MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); }
   function fmtShort(d) { return MONTHS_SHORT[d.getMonth()]+' '+d.getDate(); }
@@ -369,11 +275,10 @@
 
   function changeYear(d) { year += d; renderCalendar(); }
 
-  // ── Modal ──
   function openModal(key, dateObj) {
     activeKey = key;
     document.getElementById('modal-date').textContent = fmtDisplay(dateObj);
-    setSavingText('');
+    setSaving('');
     refreshModalList();
     document.getElementById('modal-overlay').classList.add('open');
     setTimeout(() => document.getElementById('name-input').focus(), 80);
@@ -385,39 +290,60 @@
     if (!names.length) { list.innerHTML = '<div class="empty-state">No one signed up yet — be the first!</div>'; return; }
     names.forEach((n, i) => {
       const row = document.createElement('div'); row.className = 'name-row';
-      row.innerHTML = `<span>${n}</span><button class="remove-btn" onclick="removeName(${i})">&#x2715;</button>`;
+      row.innerHTML = `<span>${n}</span><button class="remove-btn" onclick="removeName('${n.replace(/'/g,"\\'")}')">&#x2715;</button>`;
       list.appendChild(row);
     });
   }
 
   async function addName() {
     const input = document.getElementById('name-input'), name = input.value.trim();
-    if (!name || saving) return;
+    if (!name || busy) return;
+    if ((signups[activeKey]||[]).includes(name)) { input.value=''; return; }
+    busy = true;
+    document.getElementById('add-btn').disabled = true;
+    setSaving('Saving…');
     if (!signups[activeKey]) signups[activeKey] = [];
-    if (signups[activeKey].includes(name)) { input.value=''; return; }
     signups[activeKey].push(name);
     input.value = '';
     refreshModalList();
-    document.getElementById('add-btn').disabled = true;
-    await saveToBin();
+    renderCalendar();
+    try {
+      await api({ action: 'add', date: activeKey, name });
+      setSaving('Saved ✓');
+      setTimeout(() => setSaving(''), 2000);
+      setStatus('live', 'Live — last updated ' + new Date().toLocaleTimeString());
+    } catch(e) {
+      setSaving('Save failed — try again');
+      signups[activeKey].splice(signups[activeKey].indexOf(name), 1);
+      refreshModalList();
+      renderCalendar();
+    }
+    busy = false;
     document.getElementById('add-btn').disabled = false;
   }
 
-  async function removeName(idx) {
-    if (!signups[activeKey] || saving) return;
-    signups[activeKey].splice(idx, 1);
+  async function removeName(name) {
+    if (busy || !activeKey) return;
+    busy = true;
+    setSaving('Removing…');
+    signups[activeKey] = (signups[activeKey]||[]).filter(n => n !== name);
     if (!signups[activeKey].length) delete signups[activeKey];
     refreshModalList();
-    await saveToBin();
+    renderCalendar();
+    try {
+      await api({ action: 'remove', date: activeKey, name });
+      setSaving('Removed ✓');
+      setTimeout(() => setSaving(''), 2000);
+      setStatus('live', 'Live — last updated ' + new Date().toLocaleTimeString());
+    } catch(e) {
+      setSaving('Remove failed — try refreshing');
+    }
+    busy = false;
   }
 
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-    activeKey = null;
-  }
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); activeKey = null; }
   function handleOverlayClick(e) { if (e.target===document.getElementById('modal-overlay')) closeModal(); }
 
-  // ── Export ──
   function exportCSV() {
     const saturdays = getSaturdays(year);
     const rows = [['Date','Day of Week','Names','Headcount']];
@@ -428,24 +354,15 @@
     a.href = url; a.download = 'wh-saturday-signups-'+year+'.csv'; a.click(); URL.revokeObjectURL(url);
   }
 
-  // ── Setup toggle ──
-  function toggleSetup() {
-    const s = document.getElementById('setup-section');
-    s.style.display = s.style.display === 'block' ? 'none' : 'block';
-    if (s.style.display === 'block') s.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // ── Auto-refresh every 60 seconds ──
-  setInterval(() => { if (configured && !saving) loadFromBin(false); }, 60000);
-
-  // ── Keyboard shortcuts ──
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
-    if (e.key === 'Enter' && activeKey && !saving) addName();
+    if (e.key === 'Enter' && activeKey && !busy) addName();
   });
 
-  // ── Init ──
-  loadFromBin();
+  // Auto-refresh every 30 seconds
+  setInterval(() => { if (!busy) loadData(false); }, 30000);
+
+  loadData();
 </script>
 </body>
 </html>
