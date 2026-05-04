@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Window Hero — Saturday Work Sign-Up</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #002366;
+    --navy-mid: #003080;
+    --navy-light: #174090;
+    --gold: #EDAA00;
+    --gold-light: #F5C030;
+    --gold-pale: #FFF8E1;
+    --cream: #f7f8fc;
+    --white: #ffffff;
+    --text-dark: #001a4d;
+    --text-mid: #3a4a6b;
+    --text-light: #7a8aaa;
+    --success-bg: #fffae6;
+    --success-border: #EDAA00;
+    --success-text: #7a4f00;
+    --border: #dde3f0;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,35,102,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,35,102,0.16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); min-height: 100vh; }
+
+  /* Header */
+  .header { background: var(--navy); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-mark { width: 44px; height: 44px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: var(--navy); flex-shrink: 0; }
+  .header-titles { display: flex; flex-direction: column; gap: 2px; }
+  .header-titles .brand { font-size: 18px; font-weight: 600; color: var(--white); }
+  .header-titles .sub { font-size: 13px; color: #7a93b0; }
+  .header-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .year-nav { display: flex; align-items: center; background: var(--navy-mid); border-radius: 8px; overflow: hidden; border: 1px solid var(--navy-light); }
+  .year-btn { background: none; border: none; cursor: pointer; color: var(--gold-light); font-size: 16px; padding: 8px 14px; transition: background 0.15s; }
+  .year-btn:hover { background: var(--navy-light); }
+  .year-display { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--white); padding: 8px 16px; border-left: 1px solid var(--navy-light); border-right: 1px solid var(--navy-light); min-width: 68px; text-align: center; }
+  .export-btn { background: transparent; border: 1px solid var(--navy-light); cursor: pointer; color: #a0b4cc; font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
+  .export-btn:hover { background: var(--navy-mid); color: var(--white); }
+  .refresh-btn { background: transparent; border: 1px solid var(--navy-light); cursor: pointer; color: #a0b4cc; font-size: 13px; padding: 9px 14px; border-radius: 8px; transition: background 0.15s, color 0.15s; display: flex; align-items: center; gap: 6px; }
+  .refresh-btn:hover { background: var(--navy-mid); color: var(--white); }
+  .refresh-btn svg { transition: transform 0.4s; }
+  .refresh-btn.spinning svg { transform: rotate(360deg); }
+
+  /* Status bar */
+  .status-bar { background: var(--navy-mid); padding: 8px 40px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #7a93b0; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #7a93b0; flex-shrink: 0; }
+  .status-dot.live { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+  .status-dot.error { background: #f87171; }
+
+  /* Setup banner */
+  .setup-banner { background: #fff8e1; border-bottom: 2px solid var(--gold); padding: 12px 40px; font-size: 13px; color: #7a4f00; display: flex; align-items: flex-start; gap: 10px; }
+  .setup-banner strong { font-weight: 600; }
+  .setup-banner a { color: var(--navy); font-weight: 600; text-decoration: underline; cursor: pointer; }
+
+  /* Summary bar */
+  .summary-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 40px; display: flex; gap: 32px; flex-wrap: wrap; align-items: center; }
+  .summary-stat { display: flex; align-items: center; gap: 8px; }
+  .stat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .stat-dot.empty { background: #cbd5e0; }
+  .stat-dot.partial { background: var(--success-border); }
+  .stat-label { font-size: 13px; color: var(--text-mid); }
+  .stat-count { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+
+  /* Calendar */
+  .calendar-wrap { padding: 32px 40px; }
+  .months-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .month-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+  .month-header { background: var(--navy); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .month-name { font-size: 13px; font-weight: 600; color: var(--gold-light); letter-spacing: 0.08em; text-transform: uppercase; }
+  .month-count { font-family: 'DM Mono', monospace; font-size: 11px; color: #7a93b0; }
+  .month-body { padding: 10px; }
+  .sat-slot { border-radius: 7px; padding: 9px 12px; margin-bottom: 6px; cursor: pointer; border: 1px solid var(--border); background: var(--white); transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s; }
+  .sat-slot:last-child { margin-bottom: 0; }
+  .sat-slot:hover { border-color: #94a3b8; box-shadow: 0 2px 8px rgba(0,35,102,0.09); transform: translateY(-1px); }
+  .sat-slot.has-signups { background: var(--success-bg); border-color: var(--success-border); }
+  .sat-slot.has-signups .sat-date { color: var(--success-text); }
+  .sat-date { font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 3px; display: flex; align-items: center; justify-content: space-between; }
+  .sat-badge { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; background: var(--navy); color: var(--gold-light); padding: 2px 6px; border-radius: 4px; }
+  .sat-names { font-size: 11px; color: var(--success-text); line-height: 1.5; }
+  .sat-empty { font-size: 11px; color: var(--text-light); }
+
+  /* Skeleton loader */
+  .skeleton { background: linear-gradient(90deg, #e8edf5 25%, #f0f4fa 50%, #e8edf5 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 5px; height: 13px; margin-bottom: 8px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Modals */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,20,70,0.55); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 14px; box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; overflow: hidden; animation: modal-in 0.18s ease; }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .modal-header { background: var(--navy); padding: 18px 22px; }
+  .modal-label { font-size: 11px; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .modal-date-title { font-size: 20px; font-weight: 600; color: var(--white); }
+  .modal-body { padding: 20px 22px; }
+  .modal-section-label { font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+  .names-list { margin-bottom: 16px; }
+  .name-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--success-bg); border: 1px solid var(--success-border); border-radius: 7px; margin-bottom: 6px; font-size: 13px; color: var(--success-text); font-weight: 500; }
+  .remove-btn { background: none; border: none; cursor: pointer; color: #a0aec0; font-size: 16px; line-height: 1; padding: 0 2px; transition: color 0.15s; }
+  .remove-btn:hover { color: #e53e3e; }
+  .empty-state { font-size: 13px; color: var(--text-light); padding: 6px 0 14px; font-style: italic; }
+  .input-row { display: flex; gap: 8px; margin-top: 4px; }
+  .name-input { flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text-dark); outline: none; transition: border-color 0.15s; }
+  .name-input:focus { border-color: var(--navy); }
+  .name-input::placeholder { color: #a0aec0; }
+  .add-btn { background: var(--navy); border: none; cursor: pointer; color: var(--gold-light); font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.15s; white-space: nowrap; }
+  .add-btn:hover { background: var(--navy-mid); }
+  .add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .modal-footer { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+  .close-btn { background: none; border: 1px solid var(--border); cursor: pointer; color: var(--text-mid); font-size: 13px; font-weight: 500; padding: 8px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+  .close-btn:hover { background: var(--cream); border-color: #94a3b8; }
+  .saving-indicator { font-size: 12px; color: var(--text-light); font-style: italic; margin-bottom: 10px; min-height: 18px; }
+
+  /* Setup instructions */
+  .setup-section { background: #f0f4ff; border-top: 1px solid #c0ccee; padding: 32px 40px; display: none; }
+  .setup-section h2 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .setup-section .setup-sub { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+  .steps { display: flex; flex-direction: column; gap: 16px; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: var(--gold-light); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-body { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+  .step-body strong { color: var(--text-dark); font-weight: 600; }
+  .step-body code { background: #e2e8f8; padding: 2px 7px; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--navy); }
+  .step-body a { color: var(--navy); font-weight: 600; }
+  .setup-close { margin-top: 20px; background: none; border: 1px solid #c0ccee; padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 13px; color: var(--text-mid); font-family: 'DM Sans', sans-serif; }
+
+  @media (max-width: 600px) {
+    .header, .summary-bar, .calendar-wrap, .setup-banner, .setup-section, .status-bar { padding-left: 20px; padding-right: 20px; }
+    .months-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Setup banner -->
+<div class="setup-banner" id="setup-banner">
+  ⚙️ <span><strong>Setup needed before sharing:</strong> You need a free JSONBin API key and bin ID. <a onclick="toggleSetup()">See the 4-step instructions below</a> — takes about 5 minutes.</span>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">WH</div>
+    <div class="header-titles">
+      <span class="brand">Window Hero</span>
+      <span class="sub">Saturday Work Sign-Up Calendar</span>
+    </div>
+  </div>
+  <div class="header-controls">
+    <div class="year-nav">
+      <button class="year-btn" onclick="changeYear(-1)">&#8592;</button>
+      <span class="year-display" id="year-display">2026</span>
+      <button class="year-btn" onclick="changeYear(1)">&#8594;</button>
+    </div>
+    <button class="refresh-btn" id="refresh-btn" onclick="loadFromBin(true)" title="Refresh sign-ups">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Refresh
+    </button>
+    <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+  </div>
+</header>
+
+<!-- Status bar -->
+<div class="status-bar">
+  <div class="status-dot" id="status-dot"></div>
+  <span id="status-text">Connecting…</span>
+</div>
+
+<!-- Summary bar -->
+<div class="summary-bar">
+  <div class="summary-stat"><div class="stat-dot empty"></div><span class="stat-label">Open Saturdays</span><span class="stat-count" id="count-open">—</span></div>
+  <div class="summary-stat"><div class="stat-dot partial"></div><span class="stat-label">Saturdays signed up</span><span class="stat-count" id="count-signed">—</span></div>
+  <div class="summary-stat"><div class="stat-dot" style="background:var(--navy)"></div><span class="stat-label">Total sign-ups</span><span class="stat-count" id="count-total">—</span></div>
+</div>
+
+<!-- Calendar -->
+<div class="calendar-wrap">
+  <div class="months-grid" id="months-grid"></div>
+</div>
+
+<!-- Setup instructions -->
+<div class="setup-section" id="setup-section">
+  <h2>⚙️ One-Time Setup — 4 Steps</h2>
+  <p class="setup-sub">Do this once, then share the file with your team. Takes about 5 minutes.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and create a free account.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">After logging in, click <strong>API Keys</strong> in the top menu → <strong>Create Access Key</strong>. Copy the key — this is your <strong>API Key</strong>.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">Click <strong>Bins</strong> → <strong>Create a Bin</strong>. Paste in <code>{}</code> as the content and save. Copy the <strong>Bin ID</strong> from the URL or the bin detail page.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">Open this <code>.html</code> file in any text editor (Notepad, TextEdit, VS Code). Find the <strong>JSONBIN CONFIG</strong> section near the bottom of the file and paste in your <strong>API Key</strong> and <strong>Bin ID</strong>. Save the file — the yellow banner disappears and it's live.<br><br>Then host it on GitHub Pages and share the URL with your team (see the GitHub Pages instructions in the README if needed).</div>
+    </div>
+  </div>
+  <button class="setup-close" onclick="toggleSetup()">Close</button>
+</div>
+
+<!-- Sign-up modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-label">Saturday Sign-Up</div>
+      <div class="modal-date-title" id="modal-date"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-label">Signed up</div>
+      <div class="names-list" id="names-list"></div>
+      <div class="saving-indicator" id="saving-indicator"></div>
+      <div class="modal-section-label">Add your name</div>
+      <div class="input-row">
+        <input class="name-input" id="name-input" type="text" placeholder="First & last name" autocomplete="off" />
+        <button class="add-btn" id="add-btn" onclick="addName()">Add</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="close-btn" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ════════════════════════════════════════════
+  //  JSONBIN CONFIG — paste your values here
+  // ════════════════════════════════════════════
+  const JSONBIN_API_KEY = $2a$10$3YUgzpsEqvN1QG0eRuBv6eT6MVkC4luaqDGeg3Pv3iArtVnlbTekK;   // e.g. '$2a$10$abc123...'
+  const JSONBIN_BIN_ID  = 69f8cad9856a682189a61fc8;    // e.g. '6643f2abc1234567890'
+  // ════════════════════════════════════════════
+
+  const BASE_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+  const HEADERS  = { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY };
+
+  const configured = JSONBIN_API_KEY !== 'YOUR_API_KEY' && JSONBIN_BIN_ID !== 'YOUR_BIN_ID';
+  if (configured) document.getElementById('setup-banner').style.display = 'none';
+
+  const MONTHS       = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  let year      = new Date().getFullYear();
+  let signups   = {};   // { 'YYYY-MM-DD': ['Name1', 'Name2'] }
+  let activeKey = null;
+  let saving    = false;
+  let lastLoaded = null;
+
+  // ── Status helpers ──
+  function setStatus(state, text) {
+    const dot  = document.getElementById('status-dot');
+    const span = document.getElementById('status-text');
+    dot.className  = 'status-dot' + (state === 'live' ? ' live' : state === 'error' ? ' error' : '');
+    span.textContent = text;
+  }
+
+  // ── JSONBin: load ──
+  async function loadFromBin(showRefresh = false) {
+    if (!configured) { setStatus('error', 'Not configured — see setup instructions below'); renderCalendar(); return; }
+    if (showRefresh) {
+      const btn = document.getElementById('refresh-btn');
+      btn.classList.add('spinning');
+      setTimeout(() => btn.classList.remove('spinning'), 400);
+    }
+    setStatus('', 'Loading…');
+    try {
+      const res  = await fetch(BASE_URL + '/latest', { headers: HEADERS });
+      if (!res.ok) throw new Error(res.status);
+      const json = await res.json();
+      signups    = json.record || {};
+      lastLoaded = new Date();
+      setStatus('live', 'Live — last updated ' + lastLoaded.toLocaleTimeString());
+      renderCalendar();
+    } catch(e) {
+      setStatus('error', 'Could not connect — showing cached data');
+      renderCalendar();
+    }
+  }
+
+  // ── JSONBin: save ──
+  async function saveToBin() {
+    if (!configured) return;
+    saving = true;
+    setSavingText('Saving…');
+    try {
+      const res = await fetch(BASE_URL, {
+        method: 'PUT',
+        headers: HEADERS,
+        body: JSON.stringify(signups)
+      });
+      if (!res.ok) throw new Error(res.status);
+      saving = false;
+      setSavingText('Saved ✓');
+      setTimeout(() => setSavingText(''), 2000);
+      setStatus('live', 'Live — last updated ' + new Date().toLocaleTimeString());
+      renderCalendar();
+    } catch(e) {
+      saving = false;
+      setSavingText('Save failed — try again');
+    }
+  }
+
+  function setSavingText(t) {
+    const el = document.getElementById('saving-indicator');
+    if (el) el.textContent = t;
+  }
+
+  // ── Calendar helpers ──
+  function getSaturdays(y) {
+    const out = [], d = new Date(y, 0, 1);
+    while (d.getDay() !== 6) d.setDate(d.getDate() + 1);
+    while (d.getFullYear() === y) { out.push(new Date(d)); d.setDate(d.getDate() + 7); }
+    return out;
+  }
+  function fmtKey(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function fmtDisplay(d) { return MONTHS[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); }
+  function fmtShort(d) { return MONTHS_SHORT[d.getMonth()]+' '+d.getDate(); }
+
+  function updateSummary(saturdays) {
+    let open=0, signed=0, total=0;
+    saturdays.forEach(s => { const n=signups[fmtKey(s)]||[]; if(!n.length) open++; else signed++; total+=n.length; });
+    document.getElementById('count-open').textContent   = open;
+    document.getElementById('count-signed').textContent = signed;
+    document.getElementById('count-total').textContent  = total;
+  }
+
+  function renderCalendar() {
+    document.getElementById('year-display').textContent = year;
+    const saturdays = getSaturdays(year);
+    updateSummary(saturdays);
+    const grouped = {};
+    saturdays.forEach(d => { const m=d.getMonth(); if(!grouped[m]) grouped[m]=[]; grouped[m].push(d); });
+    const grid = document.getElementById('months-grid');
+    grid.innerHTML = '';
+    Object.keys(grouped).forEach(m => {
+      const sats   = grouped[m];
+      const filled = sats.filter(s => (signups[fmtKey(s)]||[]).length > 0).length;
+      const card   = document.createElement('div'); card.className = 'month-card';
+      const mh     = document.createElement('div'); mh.className = 'month-header';
+      mh.innerHTML = `<span class="month-name">${MONTHS_SHORT[m]}</span><span class="month-count">${filled}/${sats.length}</span>`;
+      card.appendChild(mh);
+      const mb = document.createElement('div'); mb.className = 'month-body';
+      sats.forEach(sat => {
+        const key = fmtKey(sat), names = signups[key]||[];
+        const slot = document.createElement('div');
+        slot.className = 'sat-slot' + (names.length ? ' has-signups' : '');
+        slot.onclick = () => openModal(key, sat);
+        const dr = document.createElement('div'); dr.className = 'sat-date';
+        dr.innerHTML = `<span>${fmtShort(sat)}</span>` + (names.length ? `<span class="sat-badge">${names.length}</span>` : '');
+        slot.appendChild(dr);
+        const sub = document.createElement('div');
+        if (names.length) { sub.className='sat-names'; sub.textContent=names.join(', '); }
+        else { sub.className='sat-empty'; sub.textContent='tap to sign up'; }
+        slot.appendChild(sub);
+        mb.appendChild(slot);
+      });
+      card.appendChild(mb); grid.appendChild(card);
+    });
+  }
+
+  function changeYear(d) { year += d; renderCalendar(); }
+
+  // ── Modal ──
+  function openModal(key, dateObj) {
+    activeKey = key;
+    document.getElementById('modal-date').textContent = fmtDisplay(dateObj);
+    setSavingText('');
+    refreshModalList();
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(() => document.getElementById('name-input').focus(), 80);
+  }
+
+  function refreshModalList() {
+    const names = signups[activeKey]||[], list = document.getElementById('names-list');
+    list.innerHTML = '';
+    if (!names.length) { list.innerHTML = '<div class="empty-state">No one signed up yet — be the first!</div>'; return; }
+    names.forEach((n, i) => {
+      const row = document.createElement('div'); row.className = 'name-row';
+      row.innerHTML = `<span>${n}</span><button class="remove-btn" onclick="removeName(${i})">&#x2715;</button>`;
+      list.appendChild(row);
+    });
+  }
+
+  async function addName() {
+    const input = document.getElementById('name-input'), name = input.value.trim();
+    if (!name || saving) return;
+    if (!signups[activeKey]) signups[activeKey] = [];
+    if (signups[activeKey].includes(name)) { input.value=''; return; }
+    signups[activeKey].push(name);
+    input.value = '';
+    refreshModalList();
+    document.getElementById('add-btn').disabled = true;
+    await saveToBin();
+    document.getElementById('add-btn').disabled = false;
+  }
+
+  async function removeName(idx) {
+    if (!signups[activeKey] || saving) return;
+    signups[activeKey].splice(idx, 1);
+    if (!signups[activeKey].length) delete signups[activeKey];
+    refreshModalList();
+    await saveToBin();
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    activeKey = null;
+  }
+  function handleOverlayClick(e) { if (e.target===document.getElementById('modal-overlay')) closeModal(); }
+
+  // ── Export ──
+  function exportCSV() {
+    const saturdays = getSaturdays(year);
+    const rows = [['Date','Day of Week','Names','Headcount']];
+    saturdays.forEach(s => { const k=fmtKey(s), n=signups[k]||[]; rows.push([fmtDisplay(s),'Saturday',n.join('; '),n.length]); });
+    const csv  = rows.map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url  = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'wh-saturday-signups-'+year+'.csv'; a.click(); URL.revokeObjectURL(url);
+  }
+
+  // ── Setup toggle ──
+  function toggleSetup() {
+    const s = document.getElementById('setup-section');
+    s.style.display = s.style.display === 'block' ? 'none' : 'block';
+    if (s.style.display === 'block') s.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── Auto-refresh every 60 seconds ──
+  setInterval(() => { if (configured && !saving) loadFromBin(false); }, 60000);
+
+  // ── Keyboard shortcuts ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter' && activeKey && !saving) addName();
+  });
+
+  // ── Init ──
+  loadFromBin();
+</script>
+</body>
+</html>
